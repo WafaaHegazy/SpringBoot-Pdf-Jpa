@@ -68,7 +68,7 @@ public class PdfView extends AbstractPdfView {
         document.newPage();
     }
 
-    private void addContent(final Document document, final List emp) throws DocumentException {
+    private void addContent(final Document document, final List<Employee> emp) throws DocumentException {
         final int nom = 1;
         final Anchor anchor = new Anchor("Chapter" + nom, catFont);
         anchor.setName("Chapter" + nom);
@@ -82,10 +82,18 @@ public class PdfView extends AbstractPdfView {
 
         subPara = new Paragraph("Subcategory 2", subFont);
         subCatPart = catPart.addSection(subPara);
-        subCatPart.add(new Paragraph("Paragraph 1"));
-        subCatPart.add(new Paragraph("Paragraph 2"));
-        subCatPart.add(new Paragraph("Paragraph 3"));
+        for (final Employee e : emp) {
+            if (!e.getEmployeeEmail().equals("")) {
+                subCatPart.add(new Paragraph("Paragraph 1   " + e.getEmployeeEmail()));
+            }
+            if (e.getEmployeeLastName() != null && !e.getEmployeeLastName().equals("")) {
+                subCatPart.add(new Paragraph("Paragraph 3   " + e.getEmployeeLastName()));
+            }
+            if (!e.getEmployeeFirstName().equals("")) {
+                subCatPart.add(new Paragraph("Paragraph 2   " + e.getEmployeeFirstName()));
+            }
 
+        }
         // add a list
         // createList(subCatPart);
         final Paragraph paragraph = new Paragraph();
@@ -93,7 +101,7 @@ public class PdfView extends AbstractPdfView {
         subCatPart.add(paragraph);
 
         // add a table
-        createEmployeeTable(subCatPart, emp);
+        // createEmployeeTable(subCatPart, emp);
         paragraph.add(anchor);
         // now add all this to the document
         document.add(catPart);
